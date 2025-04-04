@@ -214,6 +214,12 @@ func (p *Backend) handleStartup() error {
 			return fmt.Errorf("error sending deny SSL request: %w", err)
 		}
 		return p.handleStartup()
+	case *pgproto3.GSSEncRequest:
+		_, err = p.conn.Write([]byte("N"))
+		if err != nil {
+			return fmt.Errorf("error sending deny SSL request: %w", err)
+		}
+		return p.handleStartup()		
 	default:
 		return fmt.Errorf("unknown startup message: %#v", startupMessage)
 	}
